@@ -1,7 +1,6 @@
-name: Node.js CI Workflow
+name: Node.js Build and Test Workflow
 
 on:
-  workflow_dispatch:
   push:
     branches:
       - main
@@ -11,17 +10,17 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      # 1️⃣ Checkout the repository
-      - name: Checkout Code
+      # 1️⃣ Checkout repository
+      - name: Checkout code
         uses: actions/checkout@v4
 
-      # 2️⃣ Set up Node.js environment
+      # 2️⃣ Set up Node.js
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '20'   # or 18 / 22 etc.
+          node-version: '20'  # Change if needed
 
-      # 3️⃣ Cache npm dependencies for faster installs
+      # 3️⃣ Cache npm dependencies
       - name: Cache node modules
         uses: actions/cache@v4
         with:
@@ -42,12 +41,13 @@ jobs:
       - name: Build project
         run: npm run build
 
-      # 7️⃣ List build artifacts (for logging/debug)
-        # adjust the path according to your project (e.g. dist, build, out)
+      # 7️⃣ List build artifacts
       - name: List build artifacts
-        run: ls -R build || ls -R dist || echo "No build folder found"
+        run: |
+          echo "📁 Listing files in build directory:"
+          ls -R build || ls -R dist || echo "⚠️ No build directory found"
 
-      # 8️⃣ Upload build artifacts so you can download them from the Actions tab
+      # 8️⃣ Upload build artifacts (so you can download them later)
       - name: Upload build artifacts
         uses: actions/upload-artifact@v4
         with:
